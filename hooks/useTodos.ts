@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 import type { Todo, Database } from '@/lib/types'
 
@@ -30,12 +31,19 @@ export function useTodos() {
 
       if (fetchError) {
         setError(fetchError.message)
+        toast.error('Failed to load todos', {
+          description: fetchError.message,
+        })
         return
       }
 
       setTodos(data || [])
     } catch (err) {
-      setError('Failed to fetch todos')
+      const errorMessage = 'Failed to fetch todos'
+      setError(errorMessage)
+      toast.error('Failed to load todos', {
+        description: errorMessage,
+      })
       console.error('Fetch todos error:', err)
     } finally {
       setLoading(false)
@@ -69,14 +77,22 @@ export function useTodos() {
 
       if (insertError) {
         setError(insertError.message)
+        toast.error('Failed to add todo', {
+          description: insertError.message,
+        })
         return null
       }
 
       // Add to local state (optimistic update)
       setTodos((prev) => [data, ...prev])
+      toast.success('Todo added')
       return data
     } catch (err) {
-      setError('Failed to add todo')
+      const errorMessage = 'Failed to add todo'
+      setError(errorMessage)
+      toast.error('Failed to add todo', {
+        description: errorMessage,
+      })
       console.error('Add todo error:', err)
       return null
     }
@@ -112,12 +128,19 @@ export function useTodos() {
           )
         )
         setError(updateError.message)
+        toast.error('Failed to update todo', {
+          description: updateError.message,
+        })
         return false
       }
 
       return true
     } catch (err) {
-      setError('Failed to toggle todo')
+      const errorMessage = 'Failed to toggle todo'
+      setError(errorMessage)
+      toast.error('Failed to update todo', {
+        description: errorMessage,
+      })
       console.error('Toggle todo error:', err)
       return false
     }
@@ -142,6 +165,9 @@ export function useTodos() {
 
       if (updateError) {
         setError(updateError.message)
+        toast.error('Failed to update todo', {
+          description: updateError.message,
+        })
         return false
       }
 
@@ -149,9 +175,14 @@ export function useTodos() {
       setTodos((prev) =>
         prev.map((todo) => (todo.id === id ? data : todo))
       )
+      toast.success('Todo updated')
       return true
     } catch (err) {
-      setError('Failed to update todo')
+      const errorMessage = 'Failed to update todo'
+      setError(errorMessage)
+      toast.error('Failed to update todo', {
+        description: errorMessage,
+      })
       console.error('Update todo error:', err)
       return false
     }
@@ -174,12 +205,20 @@ export function useTodos() {
         // Revert on error - refetch to be safe
         fetchTodos()
         setError(deleteError.message)
+        toast.error('Failed to delete todo', {
+          description: deleteError.message,
+        })
         return false
       }
 
+      toast.success('Todo deleted')
       return true
     } catch (err) {
-      setError('Failed to delete todo')
+      const errorMessage = 'Failed to delete todo'
+      setError(errorMessage)
+      toast.error('Failed to delete todo', {
+        description: errorMessage,
+      })
       console.error('Delete todo error:', err)
       return false
     }

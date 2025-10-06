@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Loader2, Trash2, Pencil, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { Todo } from '@/lib/types'
@@ -71,13 +72,14 @@ export function TodoItem({ todo, onToggle, onUpdate, onDelete }: TodoItemProps) 
   }
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white border rounded-lg hover:shadow-sm transition-shadow">
+    <div className="flex items-center gap-3 p-3 bg-white border rounded-lg hover:shadow-sm transition-shadow" role="listitem">
       <input
         type="checkbox"
         checked={todo.is_completed}
         onChange={handleToggle}
         disabled={loading}
         className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+        aria-label={`Mark "${todo.text}" as ${todo.is_completed ? 'incomplete' : 'complete'}`}
       />
 
       {isEditing ? (
@@ -90,21 +92,28 @@ export function TodoItem({ todo, onToggle, onUpdate, onDelete }: TodoItemProps) 
             disabled={loading}
             className="flex-1"
             autoFocus
+            aria-label="Edit todo text"
           />
           <Button
             onClick={handleSave}
             disabled={loading || !editText.trim()}
             size="sm"
+            aria-label="Save changes"
           >
-            Save
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Check className="h-4 w-4" />
+            )}
           </Button>
           <Button
             onClick={handleCancel}
             disabled={loading}
             variant="outline"
             size="sm"
+            aria-label="Cancel editing"
           >
-            Cancel
+            <X className="h-4 w-4" />
           </Button>
         </div>
       ) : (
@@ -125,16 +134,22 @@ export function TodoItem({ todo, onToggle, onUpdate, onDelete }: TodoItemProps) 
             disabled={loading}
             variant="outline"
             size="sm"
+            aria-label={`Edit "${todo.text}"`}
           >
-            Edit
+            <Pencil className="h-4 w-4" />
           </Button>
           <Button
             onClick={handleDelete}
             disabled={loading}
             variant="destructive"
             size="sm"
+            aria-label={`Delete "${todo.text}"`}
           >
-            Delete
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
           </Button>
         </>
       )}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,10 +18,28 @@ export function LoginForm() {
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [touched, setTouched] = useState({ email: false, password: false })
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setTouched({ email: true, password: true })
+
+    // Client-side validation
+    if (!validateEmail(formData.email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -31,16 +50,26 @@ export function LoginForm() {
 
       if (signInError) {
         setError(signInError.message)
+        toast.error('Login failed', {
+          description: signInError.message,
+        })
         return
       }
 
       if (data.session) {
+        toast.success('Login successful', {
+          description: 'Welcome back!',
+        })
         // Redirect to todos page on successful login
         router.push('/todos')
         router.refresh()
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      const errorMessage = 'An unexpected error occurred'
+      setError(errorMessage)
+      toast.error('Login failed', {
+        description: errorMessage,
+      })
       console.error('Login error:', err)
     } finally {
       setLoading(false)
@@ -58,9 +87,16 @@ export function LoginForm() {
 
       if (error) {
         setError(error.message)
+        toast.error('Google login failed', {
+          description: error.message,
+        })
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      const errorMessage = 'An unexpected error occurred'
+      setError(errorMessage)
+      toast.error('Google login failed', {
+        description: errorMessage,
+      })
       console.error('Google login error:', err)
     }
   }
@@ -118,9 +154,17 @@ export function LoginForm() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onBlur={() => setTouched({ ...touched, email: true })}
               required
               disabled={loading}
+              aria-invalid={touched.email && !validateEmail(formData.email)}
+              aria-describedby={touched.email && !validateEmail(formData.email) ? 'email-error' : undefined}
             />
+            {touched.email && !validateEmail(formData.email) && formData.email && (
+              <p id="email-error" className="text-xs text-red-600 mt-1">
+                Please enter a valid email address
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -131,9 +175,18 @@ export function LoginForm() {
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onBlur={() => setTouched({ ...touched, password: true })}
               required
               disabled={loading}
+              minLength={6}
+              aria-invalid={touched.password && formData.password.length > 0 && formData.password.length < 6}
+              aria-describedby={touched.password && formData.password.length > 0 && formData.password.length < 6 ? 'password-error' : undefined}
             />
+            {touched.password && formData.password.length > 0 && formData.password.length < 6 && (
+              <p id="password-error" className="text-xs text-red-600 mt-1">
+                Password must be at least 6 characters
+              </p>
+            )}
           </div>
 
           {error && (

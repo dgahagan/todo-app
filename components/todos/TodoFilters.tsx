@@ -21,13 +21,15 @@ export function TodoFilters({ currentFilter, onFilterChange, counts }: TodoFilte
   ]
 
   return (
-    <div className="flex gap-2 justify-center">
+    <div className="flex gap-2 justify-center" role="group" aria-label="Todo filters">
       {filters.map((filter) => (
         <Button
           key={filter.value}
           onClick={() => onFilterChange(filter.value)}
           variant={currentFilter === filter.value ? 'default' : 'outline'}
           size="sm"
+          aria-pressed={currentFilter === filter.value}
+          aria-label={`Show ${filter.label.toLowerCase()} todos (${filter.count})`}
         >
           {filter.label} ({filter.count})
         </Button>

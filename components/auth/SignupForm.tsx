@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -18,10 +19,28 @@ export function SignupForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [touched, setTouched] = useState({ email: false, password: false })
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setTouched({ email: true, password: true })
+
+    // Client-side validation
+    if (!validateEmail(formData.email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -32,27 +51,44 @@ export function SignupForm() {
 
       if (signUpError) {
         setError(signUpError.message)
+        toast.error('Signup failed', {
+          description: signUpError.message,
+        })
         return
       }
 
       if (data.user) {
         // Check if email confirmation is required
         if (data.user.identities && data.user.identities.length === 0) {
-          setError('This email is already registered. Please login instead.')
+          const errorMessage = 'This email is already registered. Please login instead.'
+          setError(errorMessage)
+          toast.error('Signup failed', {
+            description: errorMessage,
+          })
           return
         }
 
         // If email confirmation is disabled or user is confirmed, redirect
         if (data.session) {
+          toast.success('Account created', {
+            description: 'Welcome to Todo App!',
+          })
           router.push('/todos')
           router.refresh()
         } else {
           // Email confirmation required
           setSuccess(true)
+          toast.success('Check your email', {
+            description: 'We sent you a confirmation link',
+          })
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      const errorMessage = 'An unexpected error occurred'
+      setError(errorMessage)
+      toast.error('Signup failed', {
+        description: errorMessage,
+      })
       console.error('Signup error:', err)
     } finally {
       setLoading(false)
@@ -70,9 +106,16 @@ export function SignupForm() {
 
       if (error) {
         setError(error.message)
+        toast.error('Google signup failed', {
+          description: error.message,
+        })
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      const errorMessage = 'An unexpected error occurred'
+      setError(errorMessage)
+      toast.error('Google signup failed', {
+        description: errorMessage,
+      })
       console.error('Google signup error:', err)
     }
   }
@@ -151,9 +194,17 @@ export function SignupForm() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onBlur={() => setTouched({ ...touched, email: true })}
               required
               disabled={loading}
+              aria-invalid={touched.email && !validateEmail(formData.email)}
+              aria-describedby={touched.email && !validateEmail(formData.email) ? 'email-error' : undefined}
             />
+            {touched.email && !validateEmail(formData.email) && formData.email && (
+              <p id="email-error" className="text-xs text-red-600 mt-1">
+                Please enter a valid email address
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -164,11 +215,16 @@ export function SignupForm() {
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onBlur={() => setTouched({ ...touched, password: true })}
               required
               disabled={loading}
               minLength={6}
+              aria-invalid={touched.password && formData.password.length > 0 && formData.password.length < 6}
+              aria-describedby="password-hint"
             />
-            <p className="text-xs text-gray-500">Must be at least 6 characters</p>
+            <p id="password-hint" className={`text-xs ${touched.password && formData.password.length > 0 && formData.password.length < 6 ? 'text-red-600' : 'text-gray-500'}`}>
+              Must be at least 6 characters
+            </p>
           </div>
 
           {error && (

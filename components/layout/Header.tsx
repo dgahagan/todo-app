@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { Loader2, LogOut } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import type { User } from '@supabase/supabase-js'
@@ -56,7 +57,17 @@ export function Header() {
                 variant="outline"
                 disabled={loggingOut}
               >
-                {loggingOut ? 'Logging out...' : 'Logout'}
+                {loggingOut ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging out
+                  </>
+                ) : (
+                  <>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </>
+                )}
               </Button>
             </>
           )}

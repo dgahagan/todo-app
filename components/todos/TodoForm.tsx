@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Loader2, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -41,7 +42,17 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         className="flex-1"
       />
       <Button type="submit" disabled={loading || !text.trim()}>
-        {loading ? 'Adding...' : 'Add'}
+        {loading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Adding
+          </>
+        ) : (
+          <>
+            <Plus className="mr-2 h-4 w-4" />
+            Add
+          </>
+        )}
       </Button>
     </form>
   )
