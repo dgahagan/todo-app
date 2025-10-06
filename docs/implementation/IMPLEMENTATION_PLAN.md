@@ -153,14 +153,23 @@ npx shadcn@latest add button input card label
 - [x] Placeholder todos page for redirect testing
 - [x] Google OAuth buttons added to both forms
 - [x] OAuth callback handler implemented
-- [ ] Manual test: Visit `/signup` → Create account with email/password
-- [ ] Manual test: Check Supabase → Auth → Users (user exists)
-- [ ] Manual test: Check Supabase → Table Editor → profiles (profile auto-created)
-- [ ] Manual test: Visit `/login` → Sign in with created account
-- [ ] Manual test: Browser DevTools → Application → Cookies (session cookies exist)
+- [x] Manual test: Visit `/signup` → Create account with email/password
+- [x] Manual test: Check Supabase → Auth → Users (user exists)
+- [x] Manual test: Check Supabase → Table Editor → profiles (profile auto-created)
+- [x] Manual test: Visit `/login` → Sign in with created account
+- [x] Manual test: Browser DevTools → Application → Cookies (session cookies exist)
 - [ ] Manual test (OAuth): Configure Google OAuth in Supabase (see SETUP_GUIDE.md)
 - [ ] Manual test (OAuth): Click "Continue with Google" → Authorize → Verify redirect to /todos
 - [ ] Manual test (OAuth): Check Supabase → Users (Google user created with provider metadata)
+
+**Critical Fix Applied:**
+- **Issue:** Authentication cookies were not being properly read/written, causing login redirect loops
+- **Root Cause:** Using `@supabase/supabase-js` directly instead of Next.js App Router compatible package
+- **Solution:** Installed `@supabase/ssr` (v0.7.0) and updated all Supabase client instances:
+  - `lib/supabase/client.ts` → Now uses `createBrowserClient` from `@supabase/ssr`
+  - `lib/supabase/server.ts` → Now uses `createServerClient` from `@supabase/ssr` with cookie handlers
+  - `middleware.ts` → Updated to use `createServerClient` with cookie get/set/remove methods
+- **Result:** Session cookies now persist correctly across client/server boundary in Next.js App Router
 
 ---
 
@@ -222,14 +231,14 @@ npx shadcn@latest add button input card label
    - Logout button in header
 
 **Testing Checkpoint:**
-- [ ] Visit `/todos` (redirects to login if not authenticated)
-- [ ] Add todo → Appears in list
-- [ ] Check Supabase Table Editor → `todos` table (new row exists with correct `user_id`)
-- [ ] Mark todo complete → Checkbox updates
-- [ ] Edit todo text → Saves correctly
-- [ ] Delete todo → Removes from list
-- [ ] Filter Active/Completed → Shows correct todos
-- [ ] Open new incognito window → Try accessing `/todos` → Redirects to login
+- [x] Visit `/todos` (redirects to login if not authenticated)
+- [x] Add todo → Appears in list
+- [x] Check Supabase Table Editor → `todos` table (new row exists with correct `user_id`)
+- [x] Mark todo complete → Checkbox updates
+- [x] Edit todo text → Saves correctly
+- [x] Delete todo → Removes from list
+- [x] Filter Active/Completed → Shows correct todos
+- [x] Open new incognito window → Try accessing `/todos` → Redirects to login
 
 **RLS Verification:**
 - [ ] Create second user account
