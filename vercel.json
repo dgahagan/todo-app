@@ -36,15 +36,5 @@
       "destination": "/",
       "permanent": false
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": {
-      "description": "Supabase project URL",
-      "link": "https://app.supabase.com/project/_/settings/api"
-    },
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": {
-      "description": "Supabase anonymous/public key",
-      "link": "https://app.supabase.com/project/_/settings/api"
-    }
-  }
+  ]
 }
