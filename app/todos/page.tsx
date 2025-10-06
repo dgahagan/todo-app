@@ -1,17 +1,13 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase/client'
 import { useTodos } from '@/hooks/useTodos'
 import { TodoForm } from '@/components/todos/TodoForm'
 import { TodoList } from '@/components/todos/TodoList'
 import { TodoFilters } from '@/components/todos/TodoFilters'
-import { Button } from '@/components/ui/button'
 import type { TodoFilter } from '@/lib/types'
 
 export default function TodosPage() {
-  const router = useRouter()
   const {
     todos,
     loading,
@@ -23,7 +19,6 @@ export default function TodosPage() {
   } = useTodos()
 
   const [filter, setFilter] = useState<TodoFilter>('all')
-  const [loggingOut, setLoggingOut] = useState(false)
 
   // Filter todos based on current filter
   const filteredTodos = useMemo(() => {
@@ -44,34 +39,8 @@ export default function TodosPage() {
     completed: todos.filter((todo) => todo.is_completed).length,
   }), [todos])
 
-  const handleLogout = async () => {
-    setLoggingOut(true)
-    try {
-      await supabase.auth.signOut()
-      router.push('/login')
-    } catch (err) {
-      console.error('Logout error:', err)
-      setLoggingOut(false)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">My Todos</h1>
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            disabled={loggingOut}
-          >
-            {loggingOut ? 'Logging out...' : 'Logout'}
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
           {/* Add Todo Form */}

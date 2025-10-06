@@ -13,6 +13,7 @@
 ✅ Phase 2 - Core Infrastructure Files (Complete)
 ✅ Phase 3 - Authentication UI (Complete)
 ✅ Phase 4 - Todo Functionality (Complete)
+✅ Phase 5 - Layout & Navigation (Complete)
 
 ---
 
@@ -247,7 +248,32 @@ npx shadcn@latest add button input card label
 
 ---
 
-### **Phase 5: Layout & Navigation** (30 min)
+### **Phase 5: Layout & Navigation** ✅ COMPLETE
+
+**Files Created/Modified:**
+- `components/layout/Header.tsx` (66 lines) - Shared header with branding and auth controls
+- `app/layout.tsx` - Updated with Header component and proper metadata
+- `app/page.tsx` - Complete landing page with auth redirect
+- `app/todos/page.tsx` - Removed duplicate header (now uses shared Header)
+
+**Implementation Notes:**
+- Created reusable Header component as a client component
+- Header shows user email and logout button when authenticated
+- Header uses `onAuthStateChange` to reactively update when auth state changes
+- Updated metadata to "Todo App - Manage Your Tasks"
+- Landing page has hero section, CTA buttons, and feature cards
+- Landing page is a Server Component that checks auth and redirects to `/todos` if logged in
+- Removed inline header from todos page to avoid duplication
+- Header appears globally on all pages (via root layout)
+
+**Testing Checkpoint:**
+- [ ] Visit `/` when logged out → Shows landing page with Get Started/Login buttons
+- [ ] Click "Get Started" → Navigates to `/signup`
+- [ ] Click "Login" → Navigates to `/login`
+- [ ] Visit `/` when logged in → Auto-redirects to `/todos`
+- [ ] Visit `/todos` → Header shows user email and logout button
+- [ ] Click logout → Redirects to `/login`
+- [ ] Header appears consistently across all pages
 
 1. **`components/layout/Header.tsx`** (15 min)
    - App title/logo
