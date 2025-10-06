@@ -8,17 +8,10 @@ This is a full-stack todo application built with Next.js 14+ (App Router), React
 
 ## Development Commands
 
-Since this project hasn't been initialized yet, first run:
-```bash
-npx create-next-app@latest . --typescript --tailwind --app --no-src
-npm install @supabase/supabase-js
-```
-
-Once the Next.js project is initialized:
-
 - **Development server**: `npm run dev`
 - **Build**: `npm run build`
-- **Lint**: `npm run lint`
+- **Start production**: `npm start`
+- **Type check**: `npx tsc --noEmit`
 
 ## Environment Variables
 
@@ -45,27 +38,28 @@ Template available in `.env.example` (if it exists).
 
 See `supabase/migrations/001_initial_schema.sql` for complete schema.
 
-### Project Structure (Target)
+### Project Structure
 ```
-src/
-├── app/              # Next.js App Router pages
-│   ├── layout.tsx
-│   ├── page.tsx
-│   ├── login/
-│   ├── signup/
-│   └── todos/
-├── components/
-│   ├── ui/          # shadcn/ui components
-│   ├── auth/        # LoginForm, SignupForm
-│   ├── todos/       # TodoList, TodoItem, TodoForm, TodoFilters
-│   └── layout/      # Header, Navigation
-├── lib/
-│   ├── supabase/
-│   │   ├── client.ts    # Client-side Supabase instance
-│   │   └── server.ts    # Server-side Supabase instance
-│   └── types.ts
-└── hooks/
-    └── useTodos.ts
+app/                  # Next.js App Router pages
+├── layout.tsx
+├── page.tsx
+├── login/
+├── signup/
+└── todos/
+components/
+├── ui/              # shadcn/ui components
+├── auth/            # LoginForm, SignupForm
+├── todos/           # TodoList, TodoItem, TodoForm, TodoFilters
+└── layout/          # Header, Navigation
+lib/
+├── supabase/
+│   ├── client.ts    # Client-side Supabase instance (✅ complete)
+│   └── server.ts    # Server-side Supabase instance (✅ complete)
+├── types.ts         # TypeScript interfaces (✅ complete)
+└── utils.ts         # Utility functions
+hooks/
+└── useTodos.ts
+middleware.ts        # Auth protection (✅ complete)
 ```
 
 ### Row Level Security (RLS)
@@ -105,3 +99,17 @@ Both approaches ensure:
 - `.env.local` created with API credentials
 - Git repository initialized with remote
 - Vercel account ready for deployment
+
+## Development Workflow Preferences
+
+**After completing each phase:**
+1. Update `docs/implementation/IMPLEMENTATION_PLAN.md` to mark the phase as complete
+2. Note any issues, decisions, or deviations from the original plan in the documentation
+3. Commit all changes with a descriptive commit message
+4. Push to GitHub to trigger Vercel deployment
+
+**This ensures:**
+- Single source of truth for completed work
+- Clear history of implementation decisions
+- Continuous deployment and testing
+- Ability to track progress and resume work easily
