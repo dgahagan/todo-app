@@ -178,6 +178,113 @@ echo ".env.local" >> .gitignore
 
 ---
 
+## Google OAuth Setup (Optional)
+
+This section is optional. If you want to enable Google sign-in for your app, follow these steps.
+
+### Step 1: Create Google Cloud Project
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Click **"Select a project"** → **"New Project"**
+3. **Project name**: `todo-app` (or your preferred name)
+4. Click **"Create"**
+5. Wait for project creation (notification will appear)
+
+### Step 2: Configure OAuth Consent Screen
+
+1. In the Google Cloud Console, select your project
+2. Go to **"APIs & Services"** → **"OAuth consent screen"** (left sidebar)
+3. **User Type**: Select **"External"**
+4. Click **"Create"**
+
+**App information:**
+- **App name**: `Todo App`
+- **User support email**: Your email
+- **Developer contact email**: Your email
+5. Click **"Save and Continue"**
+
+**Scopes:** (Step 2 of wizard)
+- Click **"Add or Remove Scopes"**
+- Manually add these scopes:
+  - `openid`
+  - `https://www.googleapis.com/auth/userinfo.email`
+  - `https://www.googleapis.com/auth/userinfo.profile`
+- Click **"Update"** → **"Save and Continue"**
+
+**Test users:** (Step 3 of wizard)
+- Click **"Add Users"**
+- Add your email address (for testing)
+- Click **"Save and Continue"**
+
+**Summary:** (Step 4)
+- Review and click **"Back to Dashboard"**
+
+### Step 3: Create OAuth Client ID
+
+1. Go to **"APIs & Services"** → **"Credentials"**
+2. Click **"+ Create Credentials"** → **"OAuth client ID"**
+3. **Application type**: Select **"Web application"**
+4. **Name**: `Todo App Web Client`
+
+**Authorized JavaScript origins:**
+- For local development: `http://localhost:3000`
+- For production: `https://your-app.vercel.app` (add after deploying)
+
+**Authorized redirect URIs:**
+- For local development: `http://localhost:3000/auth/callback`
+- Supabase callback: `https://<YOUR_PROJECT_REF>.supabase.co/auth/v1/callback`
+  - Find YOUR_PROJECT_REF in Supabase Settings → API → Project URL
+  - Example: `https://pnlxjuaiglyaxijzrllp.supabase.co/auth/v1/callback`
+
+5. Click **"Create"**
+6. **Copy your Client ID and Client Secret** (you'll need these next)
+
+### Step 4: Configure Supabase
+
+1. Go to your [Supabase Dashboard](https://app.supabase.com)
+2. Select your project
+3. Go to **Authentication** → **Providers** (left sidebar)
+4. Find **Google** in the list
+5. Click to expand Google settings
+
+**Configure:**
+- **Enable**: Toggle ON
+- **Client ID**: Paste from Google Cloud Console
+- **Client Secret**: Paste from Google Cloud Console
+- **Authorized Client IDs**: Leave empty (uses Client ID above)
+
+6. Click **"Save"**
+
+### Step 5: Test OAuth Flow
+
+1. Start your development server: `npm run dev`
+2. Visit `http://localhost:3000/login`
+3. Click **"Continue with Google"**
+4. Authorize with your Google account
+5. Should redirect to `/todos` with session
+
+**Troubleshooting:**
+- If redirect fails, verify callback URLs in both Google Cloud and Supabase
+- Check that Supabase Client ID/Secret are correct
+- Ensure Google OAuth is enabled in Supabase dashboard
+
+### Step 6: Production Setup
+
+Before deploying to production:
+
+1. **Update Google Cloud redirect URIs:**
+   - Add: `https://your-app.vercel.app/auth/callback`
+   - Add: Your Supabase callback URL
+
+2. **Publish OAuth consent screen** (optional for public apps):
+   - Go to OAuth consent screen
+   - Click **"Publish App"**
+   - This removes the "unverified app" warning
+
+**Note**: Keep localhost URIs for local development. Google allows multiple redirect URIs.
+
+---
+
 ## GitHub Repository Setup
 
 ### Step 1: Create GitHub Repository

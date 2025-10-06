@@ -131,23 +131,35 @@ npx shadcn@latest add button input card label
 **Additional Files Created:**
 - `app/todos/page.tsx` - Placeholder todos page (will be replaced in Phase 4)
 - `app/api/auth/signout/route.ts` - Logout API endpoint
+- `app/auth/callback/route.ts` - OAuth callback handler for Google authentication
 
 **Implementation Notes:**
 - Created placeholder `/todos` page to enable authentication redirects
 - Added logout functionality to support testing the auth flow
 - Both forms include proper error handling and loading states
 - Signup form handles email confirmation scenarios
+- **Google OAuth Integration Added:**
+  - Added "Continue with Google" / "Sign up with Google" buttons to both forms
+  - Implemented OAuth callback handler at `/auth/callback`
+  - Updated middleware to allow OAuth callback route
+  - Both auth methods (email/password and Google) create same user structure
+  - Setup instructions added to SETUP_GUIDE.md (Google Cloud Console + Supabase config)
 
 **Testing Checkpoint:**
 - [x] TypeScript compilation successful (no errors)
 - [x] Login and signup pages created
 - [x] Auth forms with error handling and loading states
 - [x] Placeholder todos page for redirect testing
-- [ ] Manual test: Visit `/signup` → Create account
+- [x] Google OAuth buttons added to both forms
+- [x] OAuth callback handler implemented
+- [ ] Manual test: Visit `/signup` → Create account with email/password
 - [ ] Manual test: Check Supabase → Auth → Users (user exists)
 - [ ] Manual test: Check Supabase → Table Editor → profiles (profile auto-created)
 - [ ] Manual test: Visit `/login` → Sign in with created account
 - [ ] Manual test: Browser DevTools → Application → Cookies (session cookies exist)
+- [ ] Manual test (OAuth): Configure Google OAuth in Supabase (see SETUP_GUIDE.md)
+- [ ] Manual test (OAuth): Click "Continue with Google" → Authorize → Verify redirect to /todos
+- [ ] Manual test (OAuth): Check Supabase → Users (Google user created with provider metadata)
 
 ---
 
