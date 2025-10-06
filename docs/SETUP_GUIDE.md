@@ -255,7 +255,27 @@ This section is optional. If you want to enable Google sign-in for your app, fol
 
 6. Click **"Save"**
 
-### Step 5: Test OAuth Flow
+### Step 5: Configure Site URL (Critical!)
+
+This step is **essential** for OAuth to work correctly:
+
+1. In Supabase, go to **Settings** (gear icon) → **Authentication**
+2. Find **"Site URL"** field
+3. Set it to your app's URL:
+   - For development: `http://localhost:3000`
+   - For production: `https://your-app.vercel.app`
+4. Find **"Redirect URLs"** section (allow list)
+5. Add these URLs (one per line):
+   ```
+   http://localhost:3000/**
+   https://your-app.vercel.app/**
+   ```
+   ⚠️ The `**` wildcard is important - it allows all paths under those domains
+6. Click **"Save"**
+
+**Why this matters:** The Site URL tells Supabase where to redirect users after OAuth authentication. If this is set to localhost, users will be redirected there even when using your production site.
+
+### Step 6: Test OAuth Flow
 
 1. Start your development server: `npm run dev`
 2. Visit `http://localhost:3000/login`
@@ -267,21 +287,31 @@ This section is optional. If you want to enable Google sign-in for your app, fol
 - If redirect fails, verify callback URLs in both Google Cloud and Supabase
 - Check that Supabase Client ID/Secret are correct
 - Ensure Google OAuth is enabled in Supabase dashboard
+- **If redirecting to localhost in production**: Check Site URL in Supabase Settings → Authentication
 
-### Step 6: Production Setup
+### Step 7: Production Setup
 
 Before deploying to production:
 
-1. **Update Google Cloud redirect URIs:**
-   - Add: `https://your-app.vercel.app/auth/callback`
-   - Add: Your Supabase callback URL
+1. **Update Supabase Site URL:**
+   - Go to **Settings** → **Authentication**
+   - Change **Site URL** to: `https://your-app.vercel.app`
+   - Update **Redirect URLs** to include: `https://your-app.vercel.app/**`
+   - Click **Save**
 
-2. **Publish OAuth consent screen** (optional for public apps):
-   - Go to OAuth consent screen
+2. **Update Google Cloud Console:**
+   - **Authorized JavaScript origins**: Add `https://your-app.vercel.app`
+   - **Authorized redirect URIs**: Add these:
+     - `https://your-app.vercel.app/auth/callback`
+     - `https://pnlxjuaiglyaxijzrllp.supabase.co/auth/v1/callback` (your Supabase callback)
+   - Click **Save**
+
+3. **Publish OAuth consent screen** (optional for public apps):
+   - Go to OAuth consent screen in Google Cloud Console
    - Click **"Publish App"**
    - This removes the "unverified app" warning
 
-**Note**: Keep localhost URIs for local development. Google allows multiple redirect URIs.
+**Note**: Keep localhost URIs for local development. Both Google and Supabase allow multiple URLs.
 
 ---
 

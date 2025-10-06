@@ -161,18 +161,31 @@ npx shadcn@latest add button input card label
 - [x] Manual test: Check Supabase → Table Editor → profiles (profile auto-created)
 - [x] Manual test: Visit `/login` → Sign in with created account
 - [x] Manual test: Browser DevTools → Application → Cookies (session cookies exist)
-- [ ] Manual test (OAuth): Configure Google OAuth in Supabase (see SETUP_GUIDE.md)
-- [ ] Manual test (OAuth): Click "Continue with Google" → Authorize → Verify redirect to /todos
-- [ ] Manual test (OAuth): Check Supabase → Users (Google user created with provider metadata)
+- [x] Manual test (OAuth): Configure Google OAuth in Supabase (see SETUP_GUIDE.md)
+- [x] Manual test (OAuth): Click "Continue with Google" → Authorize → Verify redirect to /todos
+- [x] Manual test (OAuth): Check Supabase → Users (Google user created with provider metadata)
+- [x] Manual test (OAuth): Verified working in production environment
 
-**Critical Fix Applied:**
-- **Issue:** Authentication cookies were not being properly read/written, causing login redirect loops
-- **Root Cause:** Using `@supabase/supabase-js` directly instead of Next.js App Router compatible package
-- **Solution:** Installed `@supabase/ssr` (v0.7.0) and updated all Supabase client instances:
-  - `lib/supabase/client.ts` → Now uses `createBrowserClient` from `@supabase/ssr`
-  - `lib/supabase/server.ts` → Now uses `createServerClient` from `@supabase/ssr` with cookie handlers
-  - `middleware.ts` → Updated to use `createServerClient` with cookie get/set/remove methods
-- **Result:** Session cookies now persist correctly across client/server boundary in Next.js App Router
+**Critical Fixes Applied:**
+
+1. **Authentication Cookie Fix:**
+   - **Issue:** Authentication cookies were not being properly read/written, causing login redirect loops
+   - **Root Cause:** Using `@supabase/supabase-js` directly instead of Next.js App Router compatible package
+   - **Solution:** Installed `@supabase/ssr` (v0.7.0) and updated all Supabase client instances:
+     - `lib/supabase/client.ts` → Now uses `createBrowserClient` from `@supabase/ssr`
+     - `lib/supabase/server.ts` → Now uses `createServerClient` from `@supabase/ssr` with cookie handlers
+     - `middleware.ts` → Updated to use `createServerClient` with cookie get/set/remove methods
+   - **Result:** Session cookies now persist correctly across client/server boundary in Next.js App Router
+
+2. **OAuth Production Redirect Fix:**
+   - **Issue:** Google OAuth was redirecting to localhost even in production
+   - **Root Cause:** Supabase Site URL was set to localhost
+   - **Solution:**
+     - Updated SETUP_GUIDE.md with critical "Configure Site URL" step
+     - Documented need to set Supabase Site URL to production domain
+     - Added redirect URLs whitelist configuration
+     - Improved OAuth redirect code to use `window.location.origin`
+   - **Result:** Google OAuth now works correctly in both development and production environments
 
 ---
 
