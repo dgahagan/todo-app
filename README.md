@@ -1,260 +1,241 @@
-# Todo App - Project Setup Files
+# Todo App
 
-## Overview
-This document lists all the setup files you need to save before starting development with Claude CLI.
+A modern, full-stack todo application built with Next.js 14+, React 18+, TypeScript, and Supabase. Features include user authentication, real-time data synchronization, dark mode support, and a beautiful UI powered by Tailwind CSS and shadcn/ui.
 
-## Files to Save
+## Features
 
-### 1. Project Documentation
+- **User Authentication**: Secure email/password and Google OAuth login via Supabase Auth
+- **Todo Management**: Create, read, update, and delete todos with real-time updates
+- **Dark Mode**: Automatic system preference detection with manual toggle (light/dark/system)
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Row Level Security**: Your data is protected - users can only access their own todos
+- **Modern UI**: Beautiful interface using shadcn/ui components and Tailwind CSS
+- **Type Safety**: Full TypeScript support throughout the application
 
-#### `PROJECT_OUTLINE.md`
-Complete project specification including:
-- Tech stack
-- Features
-- Database schema
-- Project structure
-- Implementation phases
+## Tech Stack
 
-**Location**: Root of project folder
+- **Frontend**: Next.js 14+ (App Router), React 18+, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Backend**: Supabase (PostgreSQL database, Authentication, Real-time)
+- **Deployment**: Vercel
+- **Version Control**: Git & GitHub
 
----
+## Quick Start
 
-#### `SETUP_GUIDE.md`
-Step-by-step instructions for configuring Supabase and Vercel, including:
-- Manual setup walkthrough
-- CLI-based setup
-- Terraform configuration (advanced)
-- Troubleshooting guide
+### Prerequisites
 
-**Location**: `docs/SETUP_GUIDE.md`
+- Node.js 18+ and npm
+- A Supabase account ([sign up free](https://supabase.com))
+- A Vercel account ([sign up free](https://vercel.com))
+- Git installed
 
----
+### Installation
 
-### 2. Infrastructure Scripts
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/dgahagan/todo-app.git
+   cd todo-app
+   ```
 
-#### `setup-infrastructure.sh`
-Automated setup script that guides you through:
-- Dependency checking
-- Supabase configuration
-- Git repository setup
-- Vercel deployment preparation
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-**Location**: `scripts/setup-infrastructure.sh`
+3. **Set up Supabase**
 
-**To use:**
-```bash
-chmod +x scripts/setup-infrastructure.sh
-./scripts/setup-infrastructure.sh
-```
+   a. Create a new project at [supabase.com](https://supabase.com)
 
----
+   b. Run the database migration in the Supabase SQL Editor:
+   - Navigate to your project's SQL Editor
+   - Copy the contents of `supabase/migrations/001_initial_schema.sql`
+   - Paste and run the SQL
 
-### 3. Configuration Files
+   c. Get your API credentials:
+   - Go to Project Settings > API
+   - Copy your project URL and anon/public key
 
-#### `vercel.json`
-Vercel deployment configuration including:
-- Build settings
-- Environment variable definitions
-- Security headers
-- Region configuration
+4. **Configure environment variables**
 
-**Location**: Root of project folder
+   Create a `.env.local` file in the root directory:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
----
-
-#### `001_initial_schema.sql`
-Supabase database migration containing:
-- Todos table schema
-- Profiles table (optional)
-- Row Level Security policies
-- Indexes and triggers
-- Seed data (commented out)
-
-**Location**: `supabase/migrations/001_initial_schema.sql`
-
----
-
-### 4. Environment Files
-
-#### `.env.example`
-Template for environment variables (commit this to git):
-```bash
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-**Location**: Root of project folder
-
----
-
-#### `.env.local`
-Your actual environment variables (DO NOT commit to git):
-```bash
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
-```
-
-**Location**: Root of project folder
-**Note**: Create this file after setting up Supabase
-
----
-
-### 5. Claude CLI Initialization
-
-#### `CLAUDE_CLI_PROMPT.md`
-The prompt to use when starting Claude CLI, which includes:
-- Instructions to review all setup documentation
-- Request for detailed implementation plan
-- Phased development approach
-
-**Location**: Root of project folder or keep handy to copy/paste
-
----
-
-## Quick Start Guide
-
-### Step 1: Create Project Structure
-```bash
-mkdir todo-app
-cd todo-app
-mkdir -p docs scripts supabase/migrations
-```
-
-### Step 2: Save All Files
-Save each file listed above to its corresponding location:
-
-```
-todo-app/
-├── PROJECT_OUTLINE.md
-├── CLAUDE_CLI_PROMPT.md
-├── vercel.json
-├── .env.example
-├── docs/
-│   └── SETUP_GUIDE.md
-├── scripts/
-│   └── setup-infrastructure.sh
-└── supabase/
-    └── migrations/
-        └── 001_initial_schema.sql
-```
-
-### Step 3: Configure Infrastructure
-
-**Option A: Automated Script**
-```bash
-chmod +x scripts/setup-infrastructure.sh
-./scripts/setup-infrastructure.sh
-```
-
-**Option B: Manual Setup**
-Follow the detailed instructions in `docs/SETUP_GUIDE.md`
-
-### Step 4: Initialize with Claude CLI
-```bash
-# Start Claude CLI
-claude
-
-# Copy and paste the prompt from CLAUDE_CLI_PROMPT.md
-```
-
-### Step 5: Follow Claude CLI's Plan
-Claude CLI will guide you through:
-1. Next.js project initialization
-2. Installing dependencies
-3. Creating components
-4. Implementing features
-5. Testing
-6. Deployment
-
----
-
-## What Each File Does
-
-| File | Purpose | When to Use |
-|------|---------|-------------|
-| `PROJECT_OUTLINE.md` | High-level project spec | Reference throughout development |
-| `SETUP_GUIDE.md` | Detailed infrastructure setup | Before starting development |
-| `setup-infrastructure.sh` | Automates infrastructure setup | Alternative to manual setup |
-| `vercel.json` | Configures Vercel deployment | Auto-used when deploying |
-| `001_initial_schema.sql` | Creates database schema | Run in Supabase SQL Editor |
-| `.env.example` | Template for environment vars | Reference when setting up |
-| `.env.local` | Actual environment variables | Created after Supabase setup |
-| `CLAUDE_CLI_PROMPT.md` | Starts development with Claude CLI | First interaction with Claude CLI |
-
----
-
-## Infrastructure Setup Checklist
-
-Before starting development, ensure:
-
-### Supabase
-- [ ] Account created
-- [ ] Project created  
-- [ ] Migration run in SQL Editor
-- [ ] API credentials copied
-- [ ] RLS verified as enabled
-
-### GitHub
-- [ ] Repository created
-- [ ] Local git initialized
-- [ ] Remote added
-- [ ] Ready to push code
-
-### Vercel
-- [ ] Account created (with GitHub OAuth)
-- [ ] Ready to import repository
-- [ ] Know where to add environment variables
-
-### Local Environment
-- [ ] Node.js installed (v18+)
-- [ ] npm installed
-- [ ] Git installed
-- [ ] `.env.local` created with Supabase credentials
-
----
-
-## Development Workflow
-
-Once setup is complete:
-
-1. **Develop locally**
+5. **Run the development server**
    ```bash
    npm run dev
    ```
 
-2. **Make changes and test**
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-3. **Commit to git**
+## Deployment
+
+### Deploy to Vercel
+
+1. **Push to GitHub**
    ```bash
-   git add .
-   git commit -m "Your message"
+   git push origin main
    ```
 
-4. **Push to GitHub**
-   ```bash
-   git push
-   ```
+2. **Import to Vercel**
+   - Go to [vercel.com](https://vercel.com) and click "New Project"
+   - Import your GitHub repository
+   - Add environment variables:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - Click "Deploy"
 
-5. **Vercel auto-deploys** 🎉
+3. **Configure OAuth (Optional)**
+
+   If using Google OAuth:
+   - Copy your Vercel deployment URL
+   - Add it to Supabase Auth settings:
+     - Go to Authentication > URL Configuration
+     - Add your URL to "Site URL" and "Redirect URLs"
+
+### Continuous Deployment
+
+Once connected to Vercel, every push to `main` automatically triggers a new deployment.
+
+## Project Structure
+
+```
+todo-app/
+├── app/                      # Next.js App Router pages
+│   ├── layout.tsx           # Root layout with theme provider
+│   ├── page.tsx             # Landing page
+│   ├── login/               # Login page
+│   ├── signup/              # Signup page
+│   └── todos/               # Todo management page
+├── components/
+│   ├── auth/                # LoginForm, SignupForm
+│   ├── layout/              # Header, Navigation
+│   ├── providers/           # ThemeProvider
+│   ├── todos/               # TodoList, TodoItem, TodoForm, TodoFilters
+│   └── ui/                  # shadcn/ui components
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts        # Client-side Supabase instance
+│   │   └── server.ts        # Server-side Supabase instance
+│   ├── types.ts             # TypeScript interfaces
+│   └── utils.ts             # Utility functions
+├── hooks/
+│   └── useTodos.ts          # Custom React hook for todo operations
+├── supabase/
+│   └── migrations/          # Database schema migrations
+├── middleware.ts            # Auth route protection
+└── docs/                    # Additional documentation
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npx tsc --noEmit` - Run TypeScript type checking
+
+## Database Schema
+
+### `todos` table
+- `id` (UUID, primary key)
+- `user_id` (UUID, foreign key to auth.users)
+- `text` (text, the todo content)
+- `is_completed` (boolean, completion status)
+- `created_at` (timestamp)
+- `updated_at` (timestamp, auto-updated)
+
+### Row Level Security (RLS)
+All database queries are automatically filtered by user. Users can only:
+- SELECT their own todos
+- INSERT todos for themselves
+- UPDATE their own todos
+- DELETE their own todos
+
+## Features in Detail
+
+### Authentication
+- Email/password signup and login
+- Google OAuth integration
+- Session management with cookies
+- Protected routes via middleware
+- Automatic redirect for authenticated users
+
+### Todo Management
+- Add new todos
+- Mark todos as complete/incomplete
+- Edit todo text (double-click or edit button)
+- Delete todos with confirmation
+- Filter by All/Active/Completed
+- Real-time updates across sessions
+- Todo count statistics
+
+### Dark Mode
+- Automatic system preference detection
+- Manual theme toggle (light/dark/system)
+- Smooth theme transitions
+- Persistent theme preference
+- Proper contrast in all components
+
+## Environment Variables
+
+Required environment variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | `https://xxxxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anonymous key | `eyJhbGc...` |
+
+Optional for OAuth:
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Your production URL | `https://your-app.vercel.app` |
+
+## Documentation
+
+Additional documentation is available in the `docs/` directory:
+
+- **[SETUP_GUIDE.md](docs/SETUP_GUIDE.md)** - Detailed infrastructure setup instructions
+- **[PROJECT_OUTLINE.md](PROJECT_OUTLINE.md)** - Complete project specification
+
+## Troubleshooting
+
+### Database connection issues
+- Verify your Supabase credentials in `.env.local`
+- Ensure the database migration has been run
+- Check RLS policies are enabled
+
+### OAuth not working
+- Verify Site URL is set in Supabase Auth settings
+- Check redirect URLs include your deployment URL
+- Ensure `NEXT_PUBLIC_SITE_URL` is set for production
+
+### Build failures
+- Run `npx tsc --noEmit` to check for TypeScript errors
+- Verify all dependencies are installed
+- Check Vercel build logs for specific errors
+
+### Dark mode issues
+- Clear browser cache and local storage
+- Check system theme preference settings
+- Verify ThemeProvider is wrapping the app in layout.tsx
+
+## Contributing
+
+This is a personal project, but feel free to fork and adapt it for your own use!
+
+## License
+
+MIT License - feel free to use this project as a template for your own applications.
+
+## Support
+
+For issues, questions, or suggestions:
+- Check the [SETUP_GUIDE.md](docs/SETUP_GUIDE.md) troubleshooting section
+- Review the [PROJECT_OUTLINE.md](PROJECT_OUTLINE.md) for architecture details
+- Open an issue on GitHub
 
 ---
 
-## Need Help?
-
-- **Supabase issues**: Check `docs/SETUP_GUIDE.md` troubleshooting section
-- **Vercel issues**: Check build logs in Vercel dashboard
-- **Code issues**: Ask Claude CLI to help debug
-- **General questions**: Review `PROJECT_OUTLINE.md` for architecture decisions
-
----
-
-## Next Steps
-
-After saving all these files:
-
-1. Run the setup script OR follow manual setup guide
-2. Verify all infrastructure is configured
-3. Start Claude CLI with the initialization prompt
-4. Begin development following Claude CLI's implementation plan
-
-**Ready to build!** 🚀
+**Built with ❤️ using Next.js, Supabase, and Claude Code**
