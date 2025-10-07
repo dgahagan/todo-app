@@ -134,7 +134,7 @@ export function SignupForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Please check your email and click the confirmation link to activate your account.
           </p>
           <Button onClick={() => router.push('/login')} className="w-full">
@@ -185,7 +185,7 @@ export function SignupForm() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            <span className="bg-white dark:bg-gray-800 px-2 text-gray-500 dark:text-gray-400">Or continue with</span>
           </div>
         </div>
 
@@ -226,7 +226,7 @@ export function SignupForm() {
               aria-invalid={touched.password && formData.password.length > 0 && formData.password.length < 6}
               aria-describedby="password-hint"
             />
-            <p id="password-hint" className={`text-xs ${touched.password && formData.password.length > 0 && formData.password.length < 6 ? 'text-red-600' : 'text-gray-500'}`}>
+            <p id="password-hint" className={`text-xs ${touched.password && formData.password.length > 0 && formData.password.length < 6 ? 'text-red-600' : 'text-gray-500 dark:text-gray-400'}`}>
               Must be at least 6 characters
             </p>
           </div>
@@ -241,9 +241,9 @@ export function SignupForm() {
             {loading ? 'Creating account...' : 'Sign Up'}
           </Button>
 
-          <p className="text-sm text-center text-gray-600">
+          <p className="text-sm text-center text-gray-600 dark:text-gray-400">
             Already have an account?{' '}
-            <a href="/login" className="text-blue-600 hover:underline">
+            <a href="/login" className="text-blue-600 dark:text-blue-400 hover:underline">
               Login
             </a>
           </p>

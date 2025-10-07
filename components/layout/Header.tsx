@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Loader2, LogOut } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import type { User } from '@supabase/supabase-js'
 
 export function Header() {
@@ -40,16 +41,17 @@ export function Header() {
   }
 
   return (
-    <header className="bg-white border-b">
+    <header className="bg-white dark:bg-gray-900 border-b dark:border-gray-800">
       <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">Todo App</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Todo App</h1>
         </div>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           {user && (
             <>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-300">
                 {user.email}
               </span>
               <Button

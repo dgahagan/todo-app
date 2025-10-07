@@ -72,13 +72,13 @@ export function TodoItem({ todo, onToggle, onUpdate, onDelete }: TodoItemProps) 
   }
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white border rounded-lg hover:shadow-sm transition-shadow" role="listitem">
+    <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg hover:shadow-sm transition-shadow" role="listitem">
       <input
         type="checkbox"
         checked={todo.is_completed}
         onChange={handleToggle}
         disabled={loading}
-        className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+        className="h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer"
         aria-label={`Mark "${todo.text}" as ${todo.is_completed ? 'incomplete' : 'complete'}`}
       />
 
@@ -121,8 +121,8 @@ export function TodoItem({ todo, onToggle, onUpdate, onDelete }: TodoItemProps) 
           <span
             className={`flex-1 cursor-pointer ${
               todo.is_completed
-                ? 'line-through text-gray-400'
-                : 'text-gray-900'
+                ? 'line-through text-gray-400 dark:text-gray-500'
+                : 'text-gray-900 dark:text-white'
             }`}
             onDoubleClick={handleEdit}
             title="Double-click to edit"

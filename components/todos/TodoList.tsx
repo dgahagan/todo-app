@@ -18,7 +18,7 @@ export function TodoList({ todos, loading, onToggle, onUpdate, onDelete }: TodoL
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-16 bg-gray-100 rounded-lg animate-pulse"
+            className="h-16 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse"
             aria-hidden="true"
           />
         ))}
@@ -29,7 +29,7 @@ export function TodoList({ todos, loading, onToggle, onUpdate, onDelete }: TodoL
 
   if (todos.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500" role="status">
+      <div className="text-center py-12 text-gray-500 dark:text-gray-400" role="status">
         <p className="text-lg">No todos yet!</p>
         <p className="text-sm mt-1">Add one above to get started.</p>
       </div>

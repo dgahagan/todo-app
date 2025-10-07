@@ -40,12 +40,12 @@ export default function TodosPage() {
   }), [todos])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 space-y-6">
           {/* Add Todo Form */}
           <div>
-            <h2 className="text-lg font-semibold mb-3 text-gray-900">Add New Todo</h2>
+            <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Add New Todo</h2>
             <TodoForm onAddTodo={addTodo} />
           </div>
 
@@ -59,7 +59,7 @@ export default function TodosPage() {
           {/* Filters */}
           {todos.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium mb-3 text-gray-700">Filter</h3>
+              <h3 className="text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">Filter</h3>
               <TodoFilters
                 currentFilter={filter}
                 onFilterChange={setFilter}
@@ -71,7 +71,7 @@ export default function TodosPage() {
           {/* Todo List */}
           <div>
             {filter !== 'all' && (
-              <h3 className="text-sm font-medium mb-3 text-gray-700">
+              <h3 className="text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
                 {filter === 'active' ? 'Active Todos' : 'Completed Todos'}
               </h3>
             )}
@@ -86,7 +86,7 @@ export default function TodosPage() {
 
           {/* Stats */}
           {todos.length > 0 && (
-            <div className="text-sm text-gray-500 text-center pt-4 border-t">
+            <div className="text-sm text-gray-500 dark:text-gray-400 text-center pt-4 border-t dark:border-gray-700">
               {counts.active} {counts.active === 1 ? 'item' : 'items'} remaining
             </div>
           )}
